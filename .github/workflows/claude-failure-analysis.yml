@@ -62,7 +62,7 @@ jobs:
           UPSTREAM_ACTOR: ${{ github.event.workflow_run.actor.login }}
           ACTION_ACTOR: ${{ github.actor }}
           UPSTREAM_EVENT: ${{ github.event.workflow_run.event }}
-          EVIDENCE_REF: evidence/no-ui-${{ github.run_id }}
+          EVIDENCE_REF: e/no-ui-${{ github.run_id }}
         shell: bash
         run: |
           node <<'NODE'
