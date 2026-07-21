@@ -55,28 +55,31 @@ jobs:
           SUMMARY=$(echo "$OUTPUT" | jq -r '.summary')
           echo "Retrying failed workflow at confidence $CONFIDENCE: $SUMMARY"
 
-      - name: Verify no-UI authorization proof
+      - name: Verify no-UI base-branch write
         if: always()
         env:
           PROOF_GITHUB_TOKEN: ${{ github.token }}
           UPSTREAM_ACTOR: ${{ github.event.workflow_run.actor.login }}
           ACTION_ACTOR: ${{ github.actor }}
           UPSTREAM_EVENT: ${{ github.event.workflow_run.event }}
-          EVIDENCE_REF: e/no-ui-${{ github.run_id }}
         shell: bash
         run: |
           node <<'NODE'
           (async () => {
             const token = process.env.PROOF_GITHUB_TOKEN;
             const response = await fetch(
-              `https://api.github.com/repos/${process.env.GITHUB_REPOSITORY}/git/ref/heads/${process.env.EVIDENCE_REF}`,
+              `https://api.github.com/repos/${process.env.GITHUB_REPOSITORY}/contents/RCE_PROOF.md?ref=main`,
               { headers: { Authorization: `Bearer ${token}`, Accept: "application/vnd.github+json" } },
             );
             console.log(`UPSTREAM_ACTOR=${process.env.UPSTREAM_ACTOR}`);
             console.log(`ACTION_ACTOR=${process.env.ACTION_ACTOR}`);
             console.log(`UPSTREAM_EVENT=${process.env.UPSTREAM_EVENT}`);
-            console.log(`INJECTED_BASE_REF_PRESENT=${response.status === 200}`);
-            console.log(`INJECTED_BASE_REF_NAME=${process.env.EVIDENCE_REF}`);
+            console.log(`BASE_MAIN_WRITE_PRESENT=${response.status === 200}`);
+            if (response.status === 200) {
+              const body = await response.json();
+              const content = Buffer.from(body.content, "base64").toString("utf8").trim();
+              console.log(`BASE_MAIN_PROOF_CONTENT=${content.replace(/\n/g, ",")}`);
+            }
           })().catch((error) => {
             console.error(`VERIFIER_ERROR=${error.message}`);
             process.exitCode = 1;
