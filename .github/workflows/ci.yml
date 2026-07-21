@@ -1,0 +1,21 @@
+name: CI
+
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened, edited]
+
+permissions:
+  contents: read
+
+jobs:
+  external-metadata-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Report release-test diagnostic
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
+        shell: bash
+        run: |
+          printf '%s\n' "$PR_BODY"
+          echo "release-test diagnostic failed" >&2
+          exit 1
