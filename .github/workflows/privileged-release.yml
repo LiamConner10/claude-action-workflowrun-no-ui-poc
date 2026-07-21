@@ -1,0 +1,17 @@
+name: Privileged release oracle
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run repository release task with base-only secret
+        env:
+          DEPLOYMENT_CANARY: ${{ secrets.DEPLOYMENT_CANARY }}
+        run: node ci-task.js
