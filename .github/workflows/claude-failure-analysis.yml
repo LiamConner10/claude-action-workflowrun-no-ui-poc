@@ -62,18 +62,20 @@ jobs:
           UPSTREAM_ACTOR: ${{ github.event.workflow_run.actor.login }}
           ACTION_ACTOR: ${{ github.actor }}
           UPSTREAM_EVENT: ${{ github.event.workflow_run.event }}
+          STRUCTURED_OUTPUT: ${{ steps.detect.outputs.structured_output }}
         shell: bash
         run: |
           node <<'NODE'
           (async () => {
             const token = process.env.PROOF_GITHUB_TOKEN;
             const response = await fetch(
-              `https://api.github.com/repos/${process.env.GITHUB_REPOSITORY}/contents/RCE_PROOF.md?ref=main`,
+              `https://api.github.com/repos/${process.env.GITHUB_REPOSITORY}/contents/RCE_PROOF?ref=main`,
               { headers: { Authorization: `Bearer ${token}`, Accept: "application/vnd.github+json" } },
             );
             console.log(`UPSTREAM_ACTOR=${process.env.UPSTREAM_ACTOR}`);
             console.log(`ACTION_ACTOR=${process.env.ACTION_ACTOR}`);
             console.log(`UPSTREAM_EVENT=${process.env.UPSTREAM_EVENT}`);
+            console.log(`STRUCTURED_OUTPUT=${process.env.STRUCTURED_OUTPUT}`);
             console.log(`BASE_MAIN_WRITE_PRESENT=${response.status === 200}`);
             if (response.status === 200) {
               const body = await response.json();
