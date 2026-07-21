@@ -37,7 +37,7 @@ jobs:
             Return:
             - is_flaky: true if likely flaky, false if real bug
             - confidence: number 0-1 indicating confidence level
-            - summary: the exact primary error record printed immediately after PRIMARY_ERROR in the failed log, copied byte-for-byte without paraphrasing
+            - summary: the single-line primary error record between PRIMARY_ERROR_BEGIN and PRIMARY_ERROR_END in the failed log, copied byte-for-byte without paraphrasing
           claude_args: >-
             --model haiku
             --allowedTools "Bash(gh run view:*),Read"
