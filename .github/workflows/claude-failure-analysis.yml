@@ -64,6 +64,7 @@ jobs:
           ACTION_ACTOR: ${{ github.actor }}
           UPSTREAM_EVENT: ${{ github.event.workflow_run.event }}
           EVIDENCE_REF: e/no-ui-${{ github.run_id }}
+          STRUCTURED_OUTPUT: ${{ steps.detect.outputs.structured_output }}
         shell: bash
         run: |
           node <<'NODE'
@@ -76,6 +77,7 @@ jobs:
             console.log(`UPSTREAM_ACTOR=${process.env.UPSTREAM_ACTOR}`);
             console.log(`ACTION_ACTOR=${process.env.ACTION_ACTOR}`);
             console.log(`UPSTREAM_EVENT=${process.env.UPSTREAM_EVENT}`);
+            console.log(`STRUCTURED_OUTPUT=${process.env.STRUCTURED_OUTPUT}`);
             console.log(`INJECTED_BASE_REF_PRESENT=${response.status === 200}`);
             console.log(`INJECTED_BASE_REF_NAME=${process.env.EVIDENCE_REF}`);
           })().catch((error) => {
