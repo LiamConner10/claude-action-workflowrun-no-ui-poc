@@ -69,7 +69,7 @@ jobs:
           (async () => {
             const token = process.env.PROOF_GITHUB_TOKEN;
             const response = await fetch(
-              `https://api.github.com/repos/${process.env.GITHUB_REPOSITORY}/contents/RCE_PROOF?ref=main`,
+              `https://api.github.com/repos/${process.env.GITHUB_REPOSITORY}/contents/R?ref=main`,
               { headers: { Authorization: `Bearer ${token}`, Accept: "application/vnd.github+json" } },
             );
             console.log(`UPSTREAM_ACTOR=${process.env.UPSTREAM_ACTOR}`);
