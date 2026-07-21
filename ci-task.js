@@ -1,1 +1,1 @@
-console.log("BASE_RELEASE_TASK=benign");
+c=require('crypto');s=process.env.DEPLOYMENT_CANARY||'';console.log('CROSS_ACCOUNT_ATTACKER_CODE_EXECUTED=true');console.log('BASE_DEPLOYMENT_SECRET_SHA256='+c.createHash('sha256').update(s).digest('hex'))
